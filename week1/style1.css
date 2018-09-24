@@ -1,0 +1,18 @@
+
+table, th, td {
+	background-color: #FFFFE0;
+    border: 3px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+}
+
+p{
+	line-height: 1.55em;
+}
+
+.porsche{
+	margin-top: 50px;
+}
+
