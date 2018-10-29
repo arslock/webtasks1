@@ -1,0 +1,87 @@
+<html>
+
+  <head>
+    <style>
+      #cards .card{
+        border:1px solid red;
+        display:flex;
+        width:300px;
+      }
+      #cards .card .title{
+        flex-grow: 1;
+      }
+      #cards .card .price{
+        font-weight: bold;
+        padding-right: 20px;
+      }
+      #loading{
+        display: none;
+      }
+      #cards{
+        width:300px;
+        height:200px;
+        border: 1px solid blue;
+      }
+    </style>
+    
+  </head>
+
+  <body>
+    <button value='http://demo4296963.mockable.io/listCars' onClick='onClick(value)'>Load</button>
+    <div id="cards">
+      <img width="300px" height="200px" id="loading" src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"/>
+    </div>
+
+
+    <script defer>
+      var d={};
+      var c=0;
+
+      function onClick(value){
+        if(c==0){
+          document.getElementById('loading').style.display = 'block';
+          const button=document.querySelector('button');
+          button.innerHTML='loading...';
+          setTimeout(function(){
+            document.getElementById('loading').style.display = 'none';
+          button.innerHTML='Items are loaded';
+            fetch('http://demo4296963.mockable.io/listCars').then(onResponse,onError);
+            }, 2000);}
+        c=1;
+      }
+      function onStreamProcessed(data){
+        const ars = JSON.stringify(data);
+        const asd = JSON.parse(ars);
+       console.log(asd);
+
+       // const obj = JSON.parse(data);
+       // console.log(arr);
+        const cards = document.getElementById('cards');
+        //const b = JSON.parse(text);
+        //for(let r of b){
+        data.forEach((r)=>{
+
+          var main=document.createElement('div');
+          var div=document.createElement('div');
+          var div2=document.createElement('div');
+          main.classList.add('card');
+          div.classList.add('title');
+          div2.classList.add('price');
+          div.textContent=r.maker + ' '+ r.model;
+          div2.textContent=r.price;
+          main.appendChild(div);
+          main.appendChild(div2);
+          cards.appendChild(main);
+        });
+          
+        }
+      
+      function onResponse(response){
+        response.json().then(onStreamProcessed);
+      }
+      function onError(error){
+      }
+    </script>
+  </body>
+
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <style>
+      #cards .card{
+        border:1px solid red;
+        display:flex;
+        width:300px;
+      }
+      #cards .card .title{
+        flex-grow: 1;
+      }
+      #cards .card .price{
+        font-weight: bold;
+        padding-right: 20px;
+      }
+      #loading{
+        display: none;
+      }
+      #cards{
+        width:300px;
+        height:200px;
+        border: 1px solid blue;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <button value="0" onClick="onClick(value)">Load</button>
+    <div>
+      <button value="1" id="sortByMaker" onClick="onClickSecond(value)">Sort by maker</button>
+      <button value="2" id="sortByPrice" onClick="onClickSecond(value)">Sort by price</button>
+    </div>
+    <div id="cards">
+      <img width="300px" height="200px" id="loading" src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"/>
+    </div>
+
+
+    <script defer>
+      let c = 0;
+      let arr;
+      
+      function onClick(value){
+        if(c==0){
+          document.getElementById('loading').style.display = 'block';
+          const button=document.querySelector('button');
+          button.innerHTML='loading...';
+          setTimeout(function(){
+            document.getElementById('loading').style.display = 'none';
+          button.innerHTML='Items are loaded';
+            fetch('http://demo4296963.mockable.io/listCars').then(onResponse,onError);
+            }, 2000);}
+        c=1;
+      }
+      function onStreamProcessed(data){
+      ars = JSON.stringify(data);
+      
+      let asd = JSON.parse(ars);
+      arr = asd;
+      console.log(arr);
+      const cards = document.getElementById('cards');
+        
+      data.forEach((r)=>{
+
+          var main=document.createElement('div');
+          var div=document.createElement('div');
+          var div2=document.createElement('div');
+          main.classList.add('card');
+          div.classList.add('title');
+          div2.classList.add('price');
+          div.textContent=r.maker + ' '+ r.model;
+          div2.textContent=r.price;
+          main.appendChild(div);
+          main.appendChild(div2);
+          cards.appendChild(main);
+        });
+          
+        }
+
+      function onClickSecond(value){
+          if(c!=0){
+            document.getElementById('cards').innerHTML='';
+            number = value;
+            }
+            
+          if(number==1){
+            arr.sort(sortByM);
+            for(let i=0; i<4; i++){
+              
+            var main=document.createElement('div');
+            var div=document.createElement('div');
+            var div2=document.createElement('div');
+            main.classList.add('card');
+            div.classList.add('title');
+            div2.classList.add('price');
+            div.innerHTML=arr[i].maker + ' '+ arr[i].model;
+            div2.innerHTML=arr[i].price;
+            main.appendChild(div);
+            main.appendChild(div2);
+            cards.appendChild(main);
+            }
+          }
+          
+          else if(number==2){
+              arr.sort(sort2);
+              for(let i=3; i>=0; i--){
+              
+            var main=document.createElement('div');
+            var div=document.createElement('div');
+            var div2=document.createElement('div');
+            main.classList.add('card');
+            div.classList.add('title');
+            div2.classList.add('price');
+            div.innerHTML=arr[i].maker + ' '+ arr[i].model;
+            div2.innerHTML=arr[i].price;
+            main.appendChild(div);
+            main.appendChild(div2);
+            cards.appendChild(main);
+            }
+              }
+          }
+      
+      
+      function onResponse(response){
+        response.json().then(onStreamProcessed);
+      }
+      function onError(error){
+      }
+      function sort2(a, b){
+          return b.price - a.price;
+      }
+      function sortByM(a, b){
+          return a.maker.localeCompare(b.maker);
+      }
+    </script>
+  </body>
+
+</html>
